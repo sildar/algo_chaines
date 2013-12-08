@@ -8,6 +8,8 @@
 \usepackage{hyperref}
 \usepackage{amsmath}
 \usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{automata,positioning}
 \usepackage{multicol}
 \graphicspath{{./img/}}
 \DeclareGraphicsExtensions{.png, .jpeg, .jpg}
@@ -81,6 +83,7 @@
   \item A : un texte et $A_i$ le suffixe de A commençant à la position i.
   \item S : la sous-chaîne (motif) recherché dans le texte A.
   \item $Occ(S, A)$ : l'ensemble des occurrences de S dans A.
+  \item Pos : le tableau des suffixes de A
   \end{itemize}
 \end{frame}
 
@@ -88,26 +91,36 @@
   \frametitle{Un élément manquant : les longest common prefixes}
   %cadre dans lequel on se place : on a le texte et le tableau des
   %suffixes. Il manque les lcp pour faire une recherche efficace
-  Dans les faits, le calcul des lcp se fait lors de la construction de
-  l'arbre des suffixes, ou du tableau des suffixes. Il ne rajoute pas
-  de complexité à ces constructions (l'ordre de grandeur reste
-  identique).
 
-  L'article présenté propose un moyen efficace d'obtenir
-  les informations des lcp lorsque celles-ci ne sont pas
-  disponibles\cite{Kasai01}.
+  \begin{block}{Les lcps pendant la construction}
+      Dans les faits, le calcul des lcp se fait lors de la construction de
+      l'arbre des suffixes, ou du tableau des suffixes. Il ne rajoute pas
+      de complexité à ces constructions (l'ordre de grandeur reste
+      identique).
+  \end{block}
+  \pause
+  \begin{block}{Les lcps après la construction}
+    L'article présenté propose un moyen efficace d'obtenir
+    les informations des lcp lorsque celles-ci ne sont pas
+    disponibles\cite{Kasai01}.
+  \end{block}
+
 \end{frame}
 
 
 \begin{frame}
   \frametitle{Un contexte réaliste ?}
   %intro sur les deux problèmes qu'on explorera plus tard
-  Un algorithme de compression basé sur la transformation de
-  Burrow-Wheeler \cite{Burrows94}, très utilisé (\emph{bizp2}), permet
-  de retrouver, lors de la décompression, le tableau des suffixes. 
+  
+  \begin{block}{Une application concrète}
+    Un algorithme de compression basé sur la transformation de
+    Burrow-Wheeler \cite{Burrows94}, très utilisé (\emph{bizp2}), permet
+    de retrouver, lors de la décompression, le tableau des suffixes. 
+    
+    Il ne manque alors plus que les informations sur les lcps pour faire
+    une recherche efficace. 
+  \end{block}
 
-  Il ne manque alors plus que les informations sur les lcps pour faire
-  une recherche efficace. 
 \end{frame}
 
 \section{Calculer les lcps en O(n)}
@@ -271,8 +284,8 @@ Entrée: Une chaîne A et son tableau des suffixes\\
 %Une conclusion à cette section ?
 
 
-\section{Simulation d'un parcours bottom-up de l'arbre des suffixes}
-\label{sec:appbottomup}
+% \section{Simulation d'un parcours bottom-up de l'arbre des suffixes}
+% \label{sec:appbottomup}
 
 %Aucune idée pour l'instant. Pas sûr qu'on aura le temps de présenter
 %en détail cette section.
@@ -283,11 +296,45 @@ Entrée: Une chaîne A et son tableau des suffixes\\
 \begin{frame}
   \frametitle{Un algorithme performant et simple}
   %rappel de la complexité, des cas d'utilisations, ...
+
+  \begin{block}{Complexité}
+    \begin{itemize}
+    \item Un tableau de taille n-1 à stocker (même ordre de grandeur que les
+      tableaux de lcp classiques)
+    \item Un calcul en O(n)
+    \end{itemize}
+  \end{block}
+
+  \begin{block}{Des applications concrètes}
+    \begin{itemize}
+    \item Recherche après décompression d'un texte sous Burrows-Wheeler
+    \item Peut simuler un parcours bottom-up de l'arbre des suffixes
+    \end{itemize}
+  \end{block}
+
 \end{frame}
 
 \begin{frame}
   \frametitle{Des questions ?}
   %une image sympa
+
+\begin{tikzpicture}[shorten >=1pt,node distance=2cm,on grid,auto] 
+   \node[state,initial] (q_0)   {$q_0$}; 
+   \node[state] (q_1) [above right=of q_0] {$q_1$}; 
+   \node[state] (q_2) [below right=of q_0] {$q_2$}; 
+   \node[state] (q_5) [right=3cm of q_0]{$q_5$};
+   \node[state] (q_6) [right=2.5cm of q_5]{$q_6$};
+   \node[state,accepting](q_7) [right=3cm of q_6] {$q_7$};
+    \path[->] 
+    (q_0) edge  node {Avez} (q_1)
+    edge  node [swap] {Posez} (q_2)
+    (q_1) edge node {vous} (q_5)
+    (q_2) edge node [swap] {nous} (q_5)
+    (q_5) edge node {des} (q_6)
+    (q_6) edge node {questions} (q_7);
+\end{tikzpicture}
+
+
 \end{frame}
 
 \begin{frame}

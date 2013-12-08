@@ -1,0 +1,90 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage{libertine}
+\usepackage[utf8]{inputenc}
+
+\usepackage[french]{babel}
+\usepackage[autolanguage]{numprint}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{float}
+\graphicspath{{./img/}}
+\DeclareGraphicsExtensions{.png, .jpeg, .jpg}
+\renewcommand*\thesection{\arabic{section}}
+\hypersetup{
+    colorlinks,
+    citecolor=blue,
+    filecolor=blue,
+    linkcolor=blue,
+    urlcolor=blue
+}
+
+\usepackage{geometry}
+%\geometry{scale=0.82, nohead}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{subcaption}
+\lstset{keywordstyle=\color{blue}}
+\lstset{stringstyle=\color{brown}}
+\lstset{showspaces=false}
+\lstset{showtabs=false}
+\lstset{extendedchars=true}
+\lstset{columns=flexible}
+\lstset{keepspaces=true}
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt}
+
+
+\usepackage{tikz}
+
+\title{Calcul efficace des plus longs préfixes communs}
+\author{ Rémi \textsc{Bois} et Loïc \textsc{Jankowiac}}
+\date{\today}
+\begin{document}
+
+\maketitle
+
+
+\section{Introduction}
+\label{sec:intro}
+
+
+\subsection{Contexte}
+\label{sec:context}
+
+\subsection{Intérêt}
+\label{sec:interest}
+
+
+
+\section{Une structure permettant de retrouver les lcps}
+\label{sec:heightstruct}
+
+
+\subsection{Le tableau Height}
+\label{sec:struct}
+
+
+
+\subsection{L'algorithme}
+\label{sec:algo}
+
+
+
+\section{Applications}
+\label{sec:appli}
+
+\subsection{La compression Block Sorting}
+\label{sec:blocksorting}
+
+\subsection{Simulation d'un parcours bottom-up}
+\label{sec:bottomup}
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+
+
+
+
+\end{document}
