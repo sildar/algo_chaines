@@ -1,4 +1,4 @@
-\documentclass{beamer}
+\documentclass[10pt]{beamer}
 
 \usetheme{Warsaw}
 \beamertemplatenavigationsymbolsempty
@@ -15,7 +15,17 @@
 \renewcommand*\thesection{\arabic{section}}
 
 
-\title{Obtention efficace des LPC}
+\AtBeginSection[]{%
+  \begin{frame}<beamer>
+    \frametitle{Plan}
+    \tableofcontents[sectionstyle=show/hide,subsectionstyle=hide/show/hide]
+  \end{frame}
+  \addtocounter{framenumber}{-1}
+}
+
+
+
+\title{Obtention efficace des Longest Common Prefixes}
 \author{Rémi Bois, Loïc Jankowiac}
 \date{\today}
 
@@ -26,29 +36,91 @@
 
 \end{frame}
 
+\begin{frame}
+  \tableofcontents
+\end{frame}
+
 \section{Contexte}
 \label{sec:context}
 
 
 
 \begin{frame}
-  \frametitle{Toto}
+  \frametitle{Recherche de pattern à partir d'un tableau des suffixes
+    et des longest common prefixes}
+  %description de l'efficacité de la recherche via le tableau des
+  %suffixes en termes de complexité algorithmique et spaciale
 \end{frame}
 
+\begin{frame}
+  \frametitle{Quelques notations}
+  %lcp, A, et tout ce dont on aura besoin dans sec:algo
+\end{frame}
+
+\begin{frame}
+  \frametitle{Un élément manquant : les longest common prefixes}
+  %cadre dans lequel on se place : on a le texte et le tableau des
+  %suffixes. Il manque les lcp pour faire une recherche efficace
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Un contexte réaliste ?}
+  %intro sur les deux problèmes qu'on explorera plus tard
+\end{frame}
 
 \section{Calculer les lcps en O(n)}
 \label{sec:algo}
 
+%Faut voir comment on organise ça. Faut le faire tourner sur un
+%exemple (abraca ?)
 
 
 \section{Application à la recherche de pattern dans un texte compressé}
 \label{sec:appcompress}
 
+\begin{frame}
+  \frametitle{La compression par Block-Sorting}
+  %complexité, implémentations
+\end{frame}
+
+\begin{frame}
+  \frametitle{Comment ça marche ?}
+  %exemple sur abraca. On s'arrête après la rotation et l'obtention de
+  %L, I. On explique "grossièrement" la suite (en une dizaine de secondes)
+\end{frame}
+
+\begin{frame}
+  \frametitle{Pourquoi ça nous intéresse ?}
+  %on peut retrouver le tableau des suffixes à partir de L, I mais il
+  %nous manque les informations sur les LCPs. On peut les retrouver en O(n).
+\end{frame}
+
+%Une conclusion à cette section ?
 
 
 \section{Simulation d'un parcours bottom-up de l'arbre des suffixes}
 \label{sec:appbottomup}
 
+%Aucune idée pour l'instant. Pas sûr qu'on aura le temps de présenter
+%en détail cette section.
 
+\section{Conclusion}
+\label{sec:conclusion}
+
+\begin{frame}
+  \frametitle{Un algorithme performant et simple}
+  %rappel de la complexité, des cas d'utilisations, ...
+\end{frame}
+
+\begin{frame}
+  \frametitle{Des questions ?}
+  %une image sympa
+\end{frame}
+
+\begin{frame}
+  \frametitle{Références}
+  %les articles cités
+\end{frame}
 
 \end{document}
