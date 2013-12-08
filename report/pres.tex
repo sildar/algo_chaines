@@ -50,26 +50,63 @@
     et des longest common prefixes}
   %description de l'efficacité de la recherche via le tableau des
   %suffixes en termes de complexité algorithmique et spaciale
-  \cite{Manber93}, \cite{Raffinot11}
+
+  \begin{block}{arbre des suffixes vs tableau des suffixes} 
+    Le tableau des suffixes est une représentation compacte de l'arbre
+    des suffixes. Le principal avantage du tableau des suffixes comparé à
+    l'arbre des suffixes est la place mémoire occuppée, environ 4 fois
+    moins importante. Cette contrainte est importante lors de
+    recherche sur de longs textes, notamment en bioinformatique \cite{Raffinot11}.
+  \end{block}
+
+  \pause
+
+  \begin{block}{La recherche de motifs}
+    Le tableau des suffixes permet de trouver les occurrences d'un
+    motif dans un texte en $O(m log(n))$. Associé aux informations sur
+    les plus longs préfixes communs (Longest Common Prefixes,
+    \emph{lcp}), il permet une recherche en $O(m + log(n))$ \cite{Manber93}.
+  \end{block}
   
 \end{frame}
 
 \begin{frame}
   \frametitle{Quelques notations}
   %lcp, A, et tout ce dont on aura besoin dans sec:algo
+  On utilisera les notation suivantes :
+
+  \begin{itemize}
+  \item lcp : Longest Common Prefixes
+  \item A : un texte et $A_i$ le suffixe de A commençant à la position i.
+  \item S : la sous-chaîne (motif) recherché dans le texte A.
+  \item $Occ(S, A)$ : l'ensemble des occurrences de S dans A.
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
   \frametitle{Un élément manquant : les longest common prefixes}
   %cadre dans lequel on se place : on a le texte et le tableau des
   %suffixes. Il manque les lcp pour faire une recherche efficace
-  \cite{Kasai01}
+  Dans les faits, le calcul des lcp se fait lors de la construction de
+  l'arbre des suffixes, ou du tableau des suffixes. Il ne rajoute pas
+  de complexité à ces constructions (l'ordre de grandeur reste
+  identique).
+
+  L'article présenté propose un moyen efficace d'obtenir
+  les informations des lcp lorsque celles-ci ne sont pas
+  disponibles\cite{Kasai01}.
 \end{frame}
 
 
 \begin{frame}
   \frametitle{Un contexte réaliste ?}
   %intro sur les deux problèmes qu'on explorera plus tard
+  Un algorithme de compression basé sur la transformation de
+  Burrow-Wheeler \cite{Burrows94}, très utilisé (\emph{bizp2}), permet
+  de retrouver, lors de la décompression, le tableau des suffixes. 
+
+  Il ne manque alors plus que les informations sur les lcps pour faire
+  une recherche efficace. 
 \end{frame}
 
 \section{Calculer les lcps en O(n)}
