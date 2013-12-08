@@ -63,7 +63,7 @@
 
   \begin{block}{La recherche de motifs}
     Le tableau des suffixes permet de trouver les occurrences d'un
-    motif dans un texte en $O(m log(n))$. Associé aux informations sur
+    motif dans un texte en $O(m*log(n))$. Associé aux informations sur
     les plus longs préfixes communs (Longest Common Prefixes,
     \emph{lcp}), il permet une recherche en $O(m + log(n))$ \cite{Manber93}.
   \end{block}
@@ -122,18 +122,90 @@
 \begin{frame}
   \frametitle{La compression par Block-Sorting}
   %complexité, implémentations
+
+  \begin{block}{Un bon compromis}
+    Block-sorting parvient à obtenir un très bon taux de compression
+    tout en étant rapide (vitesse proche de LZ et compression proche
+    des modèles statistiques\cite{Burrows94}).
+  \end{block}
+
+  \begin{block}{Basée sur une idée ``simple''}
+    Le but est de rapprocher les caractères identiques d'un texte et
+    d'utiliser un encodage ``move-to-front'' consistant à indiquer la
+    distance du prochain caractère identique. On utilise ensuite un
+    codage de Huffman pour encoder la suite obtenue.
+  \end{block}
+
+
 \end{frame}
 
 \begin{frame}
   \frametitle{Comment ça marche ?}
-  %exemple sur abraca. On s'arrête après la rotation et l'obtention de
-  %L, I. On explique "grossièrement" la suite (en une dizaine de secondes)
+  %exemple sur abcabbca$. On s'arrête après la rotation et l'obtention de
+  %L, I. On explique "grossièrement" la suite (en une dizaine de
+  %secondes)
+  \begin{figure}
+    \includegraphics[width=0.22\textwidth]{start_burrows}
+  \end{figure}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Comment ça marche ?}
+  %exemple sur abcabbca$. On s'arrête après la rotation et l'obtention de
+  %L, I. On explique "grossièrement" la suite (en une dizaine de
+  %secondes)
+  \begin{figure}
+    \includegraphics[width=0.21\textwidth]{1_burrows}
+  \end{figure}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Comment ça marche ?}
+  %exemple sur abcabbca$. On s'arrête après la rotation et l'obtention de
+  %L, I. On explique "grossièrement" la suite (en une dizaine de
+  %secondes)
+  \begin{figure}
+    \includegraphics[width=0.2\textwidth]{2_burrows}
+  \end{figure}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Comment ça marche ?}
+  %exemple sur abcabbca$. On s'arrête après la rotation et l'obtention de
+  %L, I. On explique "grossièrement" la suite (en une dizaine de
+  %secondes)
+  \begin{figure}
+    \includegraphics[width=0.2\textwidth]{3_burrows}
+  \end{figure}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Comment ça marche ?}
+  %exemple sur abcabbca$. On s'arrête après la rotation et l'obtention de
+  %L, I. On explique "grossièrement" la suite (en une dizaine de
+  %secondes)
+  \begin{figure}
+    \includegraphics[width=0.5\textwidth]{full_burrows}
+  \end{figure}
+
 \end{frame}
 
 \begin{frame}
   \frametitle{Pourquoi ça nous intéresse ?}
   %on peut retrouver le tableau des suffixes à partir de L, I mais il
-  %nous manque les informations sur les LCPs. On peut les retrouver en O(n).
+  %nous manque les informations sur les LCPs. On peut les retrouver en
+  %O(n).
+
+  \begin{block}{Comme un air de famille entre I et Pos}
+    Le tableau I est en fait le tableau des suffixes.
+    Il ne manque donc plus que les informations sur les lcp pour faire
+    une recherche efficace.
+  \end{block}
+
 \end{frame}
 
 %Une conclusion à cette section ?
