@@ -99,7 +99,12 @@ des suffixes, sans pour autant avoir à disposition les informations
 sur les lcp.
 
 Il est alors très utile d'avoir à disposition un algorithme permettant
-de retrouver efficacement les informations manquantes.
+de retrouver efficacement les informations manquantes. C'est le cas de
+celui présenter ici, qui permet de retrouver en $O(n)$ les lcp à
+partir du tableau des suffixes. Deux applications utilisant cet
+algorithmes sont ensuite présentées : la recherche de motif dans un
+texte compressé en Block Sorting et la simulation d'un parcours bottom
+up de l'arbre des suffixes.
 
 
 \section{Une structure permettant de retrouver les lcps}
