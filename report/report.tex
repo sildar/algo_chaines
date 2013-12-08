@@ -48,13 +48,58 @@
 \section{Introduction}
 \label{sec:intro}
 
+L'article de Toru Kasai et al\cite{Kasai01} présente une méthode efficace pour
+obtenir les plus longs préfixes communs nécessaires à une recherche
+efficace dans un texte. Cette information, d'habitude calculée lors de
+la construction du tableau des suffixes, peut dans certaines
+applications être absente. L'algorithme présenté par les auteurs
+permet alors de retrouver cette information en temps linéaire.
+
 
 \subsection{Contexte}
 \label{sec:context}
 
+Alors que de plus en plus d'applications utilisent de grandes
+quantités de données, il est plus que jamais utile d'améliorer les
+algorithmes de recherche de motif dans un potentiellement très large
+corpus. Les algorithmes à base d'index, comme les arbres des suffixes
+et les tableaux des suffixes, permettent d'obtenir de très bons
+résultats au prix d'un encombrement mémoire légèrement plus important
+(il faut stocker l'index).
+
+Pour ces algorithmes à base d'index, on a besoin de deux structures
+pour avoir une recherche efficace en $O(m+ log(n))$, où m est la
+taille du motif recherché et n la taille du texte : le tableau ou
+l'arbre des suffixes ainsi qu'un tableau comportant des informations
+sur les Longest Common Prefixes (lcp) de ces suffixes. Ce second
+tableau est généralement créé en même temps que le tableau ou l'arbre des
+suffixes, sans occasionner de coût en complexité supplémentaire.
+
+Si l'arbre des suffixes est très efficace pour la recherche de motif,
+il occuppe beaucoup de place en mémoire. Le tableau des suffixes
+adresse ce problème en réduisant la taille d'un facteur 4.
+
+Les algorithmes à base d'index sont très utilisés, notamment en
+bioinformatique, où les ``textes'' (des séquences du génome) dans
+lesquels les ``motif'' (une suite de protéines, de bases, ...) sont
+recherchés sont très grands. Ces algorithmes sont par exemple utilisés
+pour de l'alignement de génomes\cite{Kurtz04}. On peut trouver une
+liste des applications dans le papier de Bieganski et al \cite{Bieganski94}.
+
+
 \subsection{Intérêt}
 \label{sec:interest}
 
+
+L'abscence des lcp amène une complexité de recherche de $O(m*log(n))$
+au lieu de $O(m+log(n))$. Hors, dans certaines applications, cette
+information manque. C'est notamment le cas lors d'une compression
+Block Sorting, lors de laquelle on peut aisément récupérer un tableau
+des suffixes, sans pour autant avoir à disposition les informations
+sur les lcp.
+
+Il est alors très utile d'avoir à disposition un algorithme permettant
+de retrouver efficacement les informations manquantes.
 
 
 \section{Une structure permettant de retrouver les lcps}
@@ -84,6 +129,9 @@
 \label{sec:conclusion}
 
 
+
+\bibliographystyle{amsalpha}
+\bibliography{./pres.bib}
 
 
 
