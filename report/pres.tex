@@ -121,7 +121,8 @@
   \begin{itemize}
   \item \textit{lcp} : Longest Common Prefixes
   \item \textit{A} : Un texte
-  \item \textit{Pos} : le tableau des suffixes trié par ordre lexicographique.
+  \item \textit{Pos} : le tableau des suffixes de A trié par ordre
+    lexicographique. 
   \item \textit{Rank} : le tableau inverse de \textit{Pos}.
   \item \textit{Height} : le tableau des \textit{lcp}. Il correspond à la
     hauteur du plus petit ancêtre commun de deux feuilles consécutives dans
@@ -141,7 +142,7 @@
 
   \begin{block}{Propriété 1}
   Le \textit{lcp} de deux sous-chaînes est le minimum des \textit{lcp} de
-  toutes les sous-chaînes adjacentes dans l'intervalle.
+  toutes les sous-chaînes adjacentes dans l'intervalle du tableau Pos.
   \end{block}
   \begin{block}{Propriété 2}
   Lorsque l'on supprime le premier caractère du suffixe (ie. lorsque l'on
@@ -156,7 +157,8 @@
   
   
   \begin{block}{Propriété 3}
-    Lorsque l'on avance d'un caractère, le \textit{lcp} diminue de 1.
+    Lorsque l'on avance d'un caractère, le \textit{lcp} diminue de 1
+    si le lcp précédent était $\geq$ 1. 
   \end{block}
   
   \pause
@@ -170,13 +172,13 @@
 
       aaaa\$
 
-      $\hookrightarrow$ lcp = 5
+      $\hookrightarrow$ lcp = 4
 
       aaaa\$
 
       aaa\$
 
-      $\hookrightarrow$ lcp = 4
+      $\hookrightarrow$ lcp = 3
 
       
       Le lcp diminue de 1 à chaque fois qu'on passe au suffixe suivant.
@@ -403,6 +405,7 @@ Entrée: Une chaîne A et son tableau des suffixes\\ \hfill \\
     \begin{itemize}
     \item Un tableau de taille n-1 à stocker (même ordre de grandeur que les
       tableaux de lcp classiques)
+    \item Un espace mémoire de $13n $ lors du calcul (peut être réduit à $9n$ \cite{Manzini04})
     \item Un calcul en O(n)
     \end{itemize}
   \end{block}
