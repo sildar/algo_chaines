@@ -131,6 +131,7 @@
 
 \begin{frame}
   \frametitle{Quelques notations}
+
   Le calcul des \textit{lcp} utilise les notations suivantes~:
   \begin{itemize}
   \item \textit{Pos} : le tableau des suffixes trié par ordre lexicographique.
@@ -142,29 +143,40 @@
     $\mathit{Height}[i] = \mathit{lcp}(\mathit{Pos}[i-1], \mathit{Pos}[i])$
     \end{center}
   \end{itemize}
+  \hfill \\ \hfill \\ \hfill \\
+
+  L'idée est d'itérer sur les suffixes triés par indice de début, et de
+  calculer les \textit{lcp} sur des suffixes adjacents dans \textit{Pos}.
 \end{frame}
 
 \begin{frame}
   \frametitle{Algorithme GetHeight}
 
-  \begin{block}
-  Le \textit{lcp} de deux sous-chaînes est le minimum des lcp de toutes les
-  sous-chaînes adjacentes dans l'intervalle.
+  \begin{block}{Propriété 1}
+  Le \textit{lcp} de deux sous-chaînes est le minimum des \textit{lcp} de
+  toutes les sous-chaînes adjacentes dans l'intervalle.
   \end{block}
-  \begin{block}
+  \begin{block}{Propriété 2}
   Lorsque l'on supprime le premier caractère du suffixe (ie. lorsque l'on
   avance d'un caractère), l'ordre des suffixes comparés est conservé dans
   \textit{Pos}.
   \end{block}
-  \begin{block}
-  Lorsque l'on avance d'un caractère, le lcp diminue de 1.
+  \begin{block}{Propriété 3}
+  Lorsque l'on avance d'un caractère, le \textit{lcp} diminue de 1.
   \end{block}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Algorithme GetHeight}
-  \begin{block}{Comment calculer \textit{Height[q]} à partir de
+  \frametitle{Pourquoi calculer \textit{Height[q]} à partir de
     \textit{Height[p]}~?}
+
+  On pose $p = \mathit{Rank}[i-1]$ et $q = \mathit{Rank}[i]$.
+  \begin{block}{Théorème}
+  Si $\mathit{Height}[p] > 1$, alors~:
+  $\mathit{Height}[q] ≥ \mathit{Height}[p] - 1$
+  \end{block}
+  \begin{block}{Preuve}
+
   \end{block}
 \end{frame}
 
