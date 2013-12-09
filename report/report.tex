@@ -203,9 +203,26 @@ calculant le tableau Height tel que décrit section \ref{sec:algo}.
 \subsection{Simulation d'un parcours bottom-up}
 \label{sec:bottomup}
 
+%décrire les problèmes résolvables par un parcours bottom up de
+%l'arbre des suffixes : répétition en tandem, plus longue sous chaîne
+%commune, décomposition de Zip Lempel. Citer Abouelhoda pour cette liste.
+
 \section{Conclusion}
 \label{sec:conclusion}
 
+
+Kasai et al proposent un algorithme performant pour calculer les lcps
+à partir du tableau des suffixes. Bien que la plupart des applications
+calculent les lcps en même temps que le tableau des suffixes, on a pu
+voir qu'il existe des cas, comme la décompression d'un texte sous
+Burrows Wheeler, où cette information est manquante.
+
+On a également pu voir que cette structure permettait de simuler des
+parcours d'arbre des suffixes.
+
+Enfin, l'espace mémoire requis pour construire les lcps à partir du
+tableau des suffixes prend 13n bytes mais peut être ramené à 9n bytes
+comme montré par Manzini \cite{Manzini04}.
 
 
 \bibliographystyle{amsalpha}
