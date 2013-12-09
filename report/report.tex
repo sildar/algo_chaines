@@ -152,7 +152,7 @@ les parcours d'arbre de suffixes \cite{Abouelhoda200453}.
 \label{sec:blocksorting}
 
 La compression Block Sorting est une compression largement répandue
-(bzip2) qui s'appuie sur une transformation de Burrows-Weller
+(bzip2) qui s'appuie sur une transformation de Burrows-Wheeler
 dont le but est de rapprocher les caractères identiques d'un texte
 afin de pouvoir compresser plus efficacement \cite{Burrows94}.
 
@@ -168,7 +168,7 @@ sur la chaîne ``abcabbca\$''.
 \begin{figure}
   \centering
   \includegraphics[width=0.5\textwidth]{full_burrows}
-  \caption{Application de la transformation de Burrows Weller à la
+  \caption{Application de la transformation de Burrows Wheeler à la
     chaîne abcabbca\$}
   \label{fig:burrows}
 \end{figure}
@@ -182,7 +182,7 @@ texte initial. L'efficacité de la compression est dûe au fait qu'une
 fois les caractères rapprochés, on peut utiliser un encodage
 ``move-to-front'', qui consiste, pour chaque caractère, à indiquer sa
 distance avec sa prochaine répétition. Cette distance ayant été
-raccourcie par la transformation de Burrows Weller, on peut la coder
+raccourcie par la transformation de Burrows Wheeler, on peut la coder
 sur moins de bits. Une fois le ``move-to-front'' effectué, on encode
 les caractères via le codage de Huffman, ce qui permet d'optimiser
 l'espace mémoire utilisé.
