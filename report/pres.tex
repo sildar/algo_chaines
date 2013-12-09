@@ -228,70 +228,99 @@
 \begin{frame}
   \frametitle{Algorithme GetHeight}
   \scriptsize
-  \begin{multicols}{2}
-GetHeight\\
-Entrée: Une chaîne A et son tableau des suffixes\\ \hfill \\
-\begin{tabular}{|l}
-  \verb!pour i de 1 à n faire!\\
-  \verb! ~Rank[Pos[i]] ← i!\\
-  \verb!fin pour!\\
-  \verb!h ← 0!\\
-  \verb!pour i de 1 à n faire!\\
-  \verb! ~si Rank[i] > 1 alors!\\
-  \verb! ~ ~k ← Pos[Rank[i]-1]!\\
-  \verb! ~ ~tantque A[i+h] = A[k+h] faire!\\
-  \verb! ~ ~ ~h ← h+1!\\
-  \verb! ~ ~fin tq!\\
-  \verb! ~ ~Height[Rank[i]] ← h!\\
-  \verb! ~ ~si h > 0 alors h ← h-1 fin si!\\
-  \verb! ~fin si!\\
-  \verb!fin pour!\\
-\end{tabular}\\
-  \columnbreak
-  \begin{tabular}{ll}
-    $i$      & \verb!12345678!\\
-    \hline
-    chaîne & \verb!atalata\$!\\
-    \texttt{Pos}    & \texttt{31574268}\\
-    \texttt{Rank}   & \texttt{26153748}\\
-    \texttt{Height} & \only<1>{\texttt{.1......}
-                      }\only<2-3>{\texttt{.1...0..}
-                      }\only<4>{\texttt{.1..00..}
-                      }\only<5>{\texttt{.13.00..}
-                      }\only<6>{\texttt{.1310020}}\\
-  \end{tabular}\\
-  \hfill \\
-  h ← 0\\
-  i = 1, Rank[1] = 2 $>$ 1\\
-  ~ ~ j ← Pos[1] = 3\\
-  ~ ~ ~ A[1] = A[3] ? Oui $\Rightarrow$ h ← 1\\
-  ~ ~ ~ A[2] = A[4] ? Non $\Rightarrow$ Height[2] ← 1\\
-  ~ ~ ~ h ← 0\\
-  \pause
-  i = 2, Rank[2] = 6 $>$ 1\\
-  ~ ~ j ← Pos[5] = 4\\
-  ~ ~ ~ A[2] = A[4] ? Non $\Rightarrow$ Height[6] ← 0\\
-  \pause
-  i = 3, Rank[3] = 1\\
-  \pause
-  i = 4, Rank[4] = 5 $>$ 1\\
-  ~ ~ j ← Pos[4] = 7\\
-  ~ ~ ~ A[4] = A[7] ? Non $\Rightarrow$ Height[5] ← 0\\
-  \pause
-  i = 5, Rank[5] = 3 $>$ 1\\
-  ~ ~ j ← Pos[3-1] = Pos[2] = 1\\
-  ~ ~ ~ A[5] = A[1] ? Oui $\Rightarrow$ h ← 1\\
-  ~ ~ ~ A[6] = A[2] ? Oui $\Rightarrow$ h ← 2\\
-  ~ ~ ~ A[7] = A[3] ? Oui $\Rightarrow$ h ← 3\\
-  ~ ~ ~ A[8] = A[4] ? Non $\Rightarrow$ Height[3] ← 3\\
-  ~ ~ ~ h ← 2\\
-  \pause
-  \ldots
+  \begin{columns}
+    \column{.5\textwidth}
+      GetHeight\\
+      Entrée: Une chaîne A et son tableau des suffixes\\ \hfill \\
+      \begin{tabular}{r|l}
+        \texttt{1}  & \verb!pour i de 1 à n faire!\\
+        \texttt{2}  & \verb! ~Rank[Pos[i]] ← i!\\
+        \texttt{3}  & \verb!fin pour!\\
+        \texttt{4}  & \verb!h ← 0!\\
+        \texttt{5}  & \verb!pour i de 1 à n faire!\\
+        \texttt{6}  & \verb! ~si Rank[i] > 1 alors!\\
+        \texttt{7}  & \verb! ~ ~k ← Pos[Rank[i]-1]!\\
+        \texttt{8}  & \verb! ~ ~tantque A[i+h] = A[k+h] faire!\\
+        \texttt{9}  & \verb! ~ ~ ~h ← h+1!\\
+        \texttt{10} & \verb! ~ ~fin tq!\\
+        \texttt{11} & \verb! ~ ~Height[Rank[i]] ← h!\\
+        \texttt{12} & \verb! ~ ~si h > 0 alors h ← h-1 fin si!\\
+        \texttt{13} & \verb! ~fin si!\\
+        \texttt{14} & \verb!fin pour!\\
+      \end{tabular}\\
+    \column{.5\textwidth}
+    \begin{minipage}[c][.6\textheight][c]{\linewidth}
+      \pause
+      \begin{tabular}{ll}
+        Suffixes & Pos\\
+        \hline
+        \verb!1 atalata\$! & \texttt{\alert<3,5>{3 alata\$}}\\
+        \verb!2 talata\$!  & \texttt{\alert<3,7>{1 atalata\$}}\\
+        \verb!3 alata\$!   & \texttt{\alert<7>{5 ata\$}}\\
+        \verb!4 lata\$!    & \texttt{\alert<6>{7 a\$}}\\
+        \verb!5 ata\$!     & \texttt{\alert<4,6>{4 lata\$}}\\
+        \verb!6 ta\$!      & \texttt{\alert<4>{2 talata\$}}\\
+        \verb!7 a\$!       & \texttt{6 ta\$}\\
+        \verb!8 \$!        & \texttt{8 \$}\\
+      \end{tabular}\\
+      \hfill \\ \hfill \\
 
-  \end{multicols}
+      \begin{tabular}{ll}
+        $i$      & \texttt{\alert<3>{1}\alert<4>{2}\alert<5>{3}\alert<6>{4}\alert<7>{5}678}\\
+        \hline
+        chaîne & \verb!atalata\$!\\
+        \texttt{Pos}    & \texttt{\alert<3,5>{3}\alert<3,7>{1}\alert<7>{5}\alert<6>{7}\alert<4,6>{4}\alert<4>{2}68}\\
+        \texttt{Rank}   & \texttt{\alert<3>{2}\alert<4>{6}\alert<5>{1}\alert<6>{5}\alert<7>{3}748}\\
+        \texttt{Height} & \only<2>{\texttt{........}
+                          }\only<3>{\texttt{.1......}
+                          }\only<4-5>{\texttt{.1...0..}
+                          }\only<6>{\texttt{.1..00..}
+                          }\only<7>{\texttt{.13.00..}
+                          }\only<8->{\texttt{.1310020}}\\
+      \end{tabular}\\
+      \hfill \\ \hfill \\
+      \only<-2>{\\ \\ \\ \\ \\ \\
+      }\only<3>{h ← 0\\
+      \alert<3>{i = 1} ; Rank[i] = 2 ; j ← 3\\
+      ~ ~ ~ A[1] = A[3] ? Oui $\Rightarrow$ h ← 1\\
+      ~ ~ ~ A[2] = A[4] ? Non $\Rightarrow$ Height[2] ← 1\\
+      ~ ~ ~ h ← 0\\
+      \\
+      }\only<4>{h = 0\\
+      \alert<4>{i = 2} ; Rank[i] = 6 ; j ← 4\\
+      ~ ~ ~ A[2] = A[4] ? Non $\Rightarrow$ Height[6] ← 0\\
+      \\ \\ \\
+      }\only<5>{h = 0\\
+      \alert<5>{i = 3} ; Rank[i] = 1\\
+      \\ \\ \\ \\
+      }\only<6>{h = 0\\
+      \alert<6>{i = 4} ; Rank[i] = 5 ; j ← 7\\
+      ~ ~ ~ A[4] = A[7] ? Non $\Rightarrow$ Height[5] ← 0\\
+      \\ \\ \\
+      }\only<7>{h = 0\\
+      \alert<7>{i = 5} ; Rank[5] = 3 ; j ← 1\\
+      ~ ~ ~ A[5] = A[1] ? Oui $\Rightarrow$ h ← 1\\
+      ~ ~ ~ A[6] = A[2] ? Oui $\Rightarrow$ h ← 2\\
+      ~ ~ ~ A[7] = A[3] ? Oui $\Rightarrow$ h ← 3\\
+      ~ ~ ~ A[8] = A[4] ? Non $\Rightarrow$ Height[3] ← 3\\
+      ~ ~ ~ h ← 2
+      }\only<8>{\\ \ldots \\ \\ \\ \\ \\}
+
+    \end{minipage}
+  \end{columns}
   \normalsize
 \end{frame}
 
+\begin{frame}
+  \frametitle{Algorithme GetHeight}
+  \begin{figure}
+    \includegraphics[width=0.6\textwidth]{sufftree_atalata}
+  \end{figure}
+  \hfill \\
+  \begin{center}
+    \texttt{Height : . 1 3 1 0 0 2 0}
+  \end{center}
+\end{frame}
 
 \section{Application à la recherche de motif dans un texte compressé}
 \label{sec:appcompress}
