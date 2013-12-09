@@ -9,8 +9,8 @@
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{tikz}
-\usetikzlibrary{automata,positioning}
 \usepackage{multicol}
+\usetikzlibrary{automata,positioning}
 \graphicspath{{./img/}}
 \DeclareGraphicsExtensions{.png, .jpeg, .jpg}
 
@@ -45,7 +45,6 @@
 
 \section{Contexte}
 \label{sec:context}
-
 
 
 \begin{frame}
@@ -161,9 +160,62 @@
   avance d'un caractère), l'ordre des suffixes comparés est conservé dans
   \textit{Pos}.
   \end{block}
+\end{frame}
+
+\begin{frame}
+
+  \frametitle{Algorithme GetHeight}
+  
+  
   \begin{block}{Propriété 3}
-  Lorsque l'on avance d'un caractère, le \textit{lcp} diminue de 1.
+    Lorsque l'on avance d'un caractère, le \textit{lcp} diminue de 1.
   \end{block}
+  
+
+  \begin{columns}
+    \begin{column}{.48\textwidth}
+      
+      Aucun caractère ne diffère :
+      
+      aaaaa\$
+
+      aaaa\$
+
+      $\hookrightarrow$ lcp = 5
+
+      aaaa\$
+
+      aaa\$
+
+      $\hookrightarrow$ lcp = 4
+
+      
+      Le lcp diminue de 1 à chaque fois qu'on passe au suffixe suivant.
+      
+      % Left Part
+    \end{column}%
+    \hfill%
+    \begin{column}{.48\textwidth}
+        
+      Au moins un caractère diffère (mais lcp $>$ 1):
+      
+        aabaa\$
+
+        abaa\$
+
+        $\hookrightarrow$ lcp = 1
+
+        abaa\$
+
+        baa\$
+
+        $\hookrightarrow$ lcp = 0
+        
+        Le lcp diminue de 1 à chaque fois qu'on passe au suffixe suivant.
+        
+      \end{column}%
+      \end{columns}
+  
 \end{frame}
 
 \begin{frame}
