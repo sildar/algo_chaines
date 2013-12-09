@@ -407,11 +407,21 @@ Entrée: Une chaîne A et son tableau des suffixes\\ \hfill \\
     \end{itemize}
   \end{block}
 
+  \pause
+
   \begin{block}{Des applications concrètes}
     \begin{itemize}
     \item Recherche après décompression d'un texte sous Burrows-Wheeler
     \item Peut simuler un parcours bottom-up de l'arbre des suffixes
     \end{itemize}
+  \end{block}
+
+  \pause
+
+  \begin{block}{Une structure extensible}
+    Abouelhoda et al\cite{Abouelhoda200453} ont proposé d'améliorer la structure obtenue par
+    un arbre d'intervalles des lcps qui permet d'obtenir la liste des
+    enfants d'un noeud interne à l'arbre.
   \end{block}
 
 \end{frame}
@@ -443,6 +453,7 @@ Entrée: Une chaîne A et son tableau des suffixes\\ \hfill \\
   \frametitle{Références}
   %les articles cités
   \bibliographystyle{amsalpha}
+  \small
   \bibliography{./pres.bib}
 \end{frame}
 
