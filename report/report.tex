@@ -38,7 +38,7 @@
 \usepackage{tikz}
 
 \title{Calcul efficace des plus longs préfixes communs}
-\author{ Rémi \textsc{Bois} et Loïc \textsc{Jankowiac}}
+\author{Rémi \textsc{Bois} et Loïc \textsc{Jankowiak}}
 \date{\today}
 \begin{document}
 
@@ -92,7 +92,7 @@ liste des applications dans le papier de Bieganski et al \cite{Bieganski94}.
 
 
 L'abscence des lcp amène une complexité de recherche de $O(m*log(n))$
-au lieu de $O(m+log(n))$. Hors, dans certaines applications, cette
+au lieu de $O(m+log(n))$. Or, dans certaines applications, cette
 information manque. C'est notamment le cas lors d'une compression
 Block Sorting, lors de laquelle on peut aisément récupérer un tableau
 des suffixes, sans pour autant avoir à disposition les informations
@@ -114,6 +114,16 @@ up de l'arbre des suffixes.
 \subsection{Le tableau Height}
 \label{sec:struct}
 
+% idée : on itère sur les suffixes dans l'ordre d'indice
+% et on calcule le lcp avec le précédent dans Pos (ordre lexicographique)
+
+% 3 propriétés :
+% - le lcp de 2 sous-chaînes est le minimum des lcp de toutes les sous-chaînes
+%   adjacentes dans l'intervalle
+% - lorsque l'on supprime le premier caractère du suffixe (ie. lorsque l'on
+%   avance d'un caractère), l'ordre des suffixes comparés est conservé dans Pos
+% - lorsque l'on avance d'un caractère, le lcp diminue de 1 :
+%   lcp(A_{Pos[x−1]+1}, A_{Pos[x]+1}) = lcp(A_{Pos[x−1]}, A_{Pos[x]}) - 1.
 
 
 \subsection{L'algorithme}

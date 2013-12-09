@@ -130,11 +130,51 @@
 %exemple (abraca ?)
 
 \begin{frame}
+  \frametitle{Quelques notations}
+  Le calcul des \textit{lcp} utilise les notations suivantes~:
+  \begin{itemize}
+  \item \textit{Pos} : le tableau des suffixes trié par ordre lexicographique.
+  \item \textit{Rank} : le tableau inverse de \textit{Pos}.
+  \item \textit{Height} : le tableau des \textit{lcp}. Il correspond à la
+    hauteur du plus petit ancêtre commun de deux feuilles consécutives dans
+    l'arbre des suffixes~:
+    \begin{center}
+    $\mathit{Height}[i] = \mathit{lcp}(\mathit{Pos}[i-1], \mathit{Pos}[i])$
+    \end{center}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Algorithme GetHeight}
+
+  \begin{block}
+  Le \textit{lcp} de deux sous-chaînes est le minimum des lcp de toutes les
+  sous-chaînes adjacentes dans l'intervalle.
+  \end{block}
+  \begin{block}
+  Lorsque l'on supprime le premier caractère du suffixe (ie. lorsque l'on
+  avance d'un caractère), l'ordre des suffixes comparés est conservé dans
+  \textit{Pos}.
+  \end{block}
+  \begin{block}
+  Lorsque l'on avance d'un caractère, le lcp diminue de 1.
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Algorithme GetHeight}
+  \begin{block}{Comment calculer \textit{Height[q]} à partir de
+    \textit{Height[p]}~?}
+  \end{block}
+\end{frame}
+
+
+\begin{frame}
   \frametitle{Algorithme GetHeight}
   \scriptsize
   \begin{multicols}{2}
 GetHeight\\
-Entrée: Une chaîne A et son tableau des suffixes\\
+Entrée: Une chaîne A et son tableau des suffixes\\ \hfill \\
 \begin{tabular}{|l}
   \verb!pour i de 1 à n faire!\\
   \verb! ~Rank[Pos[i]] ← i!\\
@@ -143,7 +183,7 @@ Entrée: Une chaîne A et son tableau des suffixes\\
   \verb!pour i de 1 à n faire!\\
   \verb! ~si Rank[i] > 1 alors!\\
   \verb! ~ ~k ← Pos[Rank[i]-1]!\\
-  \verb! ~ ~tantque A[i+h] = A[j+h] faire!\\
+  \verb! ~ ~tantque A[i+h] = A[k+h] faire!\\
   \verb! ~ ~ ~h ← h+1!\\
   \verb! ~ ~fin tq!\\
   \verb! ~ ~Height[Rank[i]] ← h!\\
@@ -158,31 +198,39 @@ Entrée: Une chaîne A et son tableau des suffixes\\
     chaîne & \verb!atalata\$!\\
     \texttt{Pos}    & \texttt{31574268}\\
     \texttt{Rank}   & \texttt{26153748}\\
-    \texttt{Height} & \texttt{.1310020}\\
+    \texttt{Height} & \only<1>{\texttt{.1......}
+                      }\only<2-3>{\texttt{.1...0..}
+                      }\only<4>{\texttt{.1..00..}
+                      }\only<5>{\texttt{.13.00..}
+                      }\only<6>{\texttt{.1310020}}\\
   \end{tabular}\\
   \hfill \\
   h ← 0\\
   i = 1, Rank[1] = 2 $>$ 1\\
-         j ← Pos[1] = 3\\
-           A[1] = A[3] ? Oui $\Rightarrow$ h ← 1\\
-           A[2] = A[4] ? Non $\Rightarrow$ Height[2] ← 1 ; h ← 0\\
+  ~ ~ j ← Pos[1] = 3\\
+  ~ ~ ~ A[1] = A[3] ? Oui $\Rightarrow$ h ← 1\\
+  ~ ~ ~ A[2] = A[4] ? Non $\Rightarrow$ Height[2] ← 1\\
+  ~ ~ ~ h ← 0\\
   \pause
   i = 2, Rank[2] = 6 $>$ 1\\
-         j ← Pos[5] = 4\\
-           A[2] = A[4] ? Non $\Rightarrow$ Height[6] ← 0\\
+  ~ ~ j ← Pos[5] = 4\\
+  ~ ~ ~ A[2] = A[4] ? Non $\Rightarrow$ Height[6] ← 0\\
   \pause
   i = 3, Rank[3] = 1\\
   \pause
   i = 4, Rank[4] = 5 $>$ 1\\
-         j ← Pos[4] = 7\\
-           A[4] = A[7] ? Non $\Rightarrow$ Height[5] ← 0\\
+  ~ ~ j ← Pos[4] = 7\\
+  ~ ~ ~ A[4] = A[7] ? Non $\Rightarrow$ Height[5] ← 0\\
   \pause
   i = 5, Rank[5] = 3 $>$ 1\\
-         j ← Pos[3-1] = Pos[2] = 1\\
-           A[5] = A[1] ? Oui $\Rightarrow$ h ← 1\\
-           A[6] = A[2] ? Oui $\Rightarrow$ h ← 2\\
-           A[7] = A[3] ? Oui $\Rightarrow$ h ← 3\\
-           A[8] = A[4] ? Non $\Rightarrow$ Height[3] ← 3 ; h ← 2\\
+  ~ ~ j ← Pos[3-1] = Pos[2] = 1\\
+  ~ ~ ~ A[5] = A[1] ? Oui $\Rightarrow$ h ← 1\\
+  ~ ~ ~ A[6] = A[2] ? Oui $\Rightarrow$ h ← 2\\
+  ~ ~ ~ A[7] = A[3] ? Oui $\Rightarrow$ h ← 3\\
+  ~ ~ ~ A[8] = A[4] ? Non $\Rightarrow$ Height[3] ← 3\\
+  ~ ~ ~ h ← 2\\
+  \pause
+  \ldots
 
   \end{multicols}
   \normalsize
