@@ -73,20 +73,6 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Quelques notations}
-  %lcp, A, et tout ce dont on aura besoin dans sec:algo
-  On utilisera les notation suivantes :
-
-  \begin{itemize}
-  \item lcp : Longest Common Prefixes
-  \item A : un texte et $A_i$ le suffixe de A commençant à la position i.
-  \item S : la sous-chaîne (motif) recherché dans le texte A.
-  \item $Occ(S, A)$ : l'ensemble des occurrences de S dans A.
-  \item Pos : le tableau des suffixes de A
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
   \frametitle{Un élément manquant : les longest common prefixes}
   %cadre dans lequel on se place : on a le texte et le tableau des
   %suffixes. Il manque les lcp pour faire une recherche efficace
@@ -133,6 +119,8 @@
 
   Le calcul des \textit{lcp} utilise les notations suivantes~:
   \begin{itemize}
+  \item \textit{lcp} : Longest Common Prefixes
+  \item \textit{A} : Un texte
   \item \textit{Pos} : le tableau des suffixes trié par ordre lexicographique.
   \item \textit{Rank} : le tableau inverse de \textit{Pos}.
   \item \textit{Height} : le tableau des \textit{lcp}. Il correspond à la
