@@ -131,13 +131,14 @@
     hauteur du plus petit ancêtre commun de deux feuilles consécutives dans
     l'arbre des suffixes~:
     \begin{center}
-    $\mathit{Height}[i] = \mathit{lcp}(\mathit{Pos}[i-1], \mathit{Pos}[i])$
+    $\mathit{Height}[i] = \mathit{lcp}(A_{\mathit{Pos}[i-1]},
+      A_{\mathit{Pos}[i]})$
     \end{center}
   \end{itemize}
   \hfill \\ \hfill \\
 
   L'idée est d'itérer sur les suffixes triés par indice de début, et de
-  calculer les \textit{lcp} sur des suffixes adjacents dans \textit{Pos}.
+  calculer les \textit{lcp} des suffixes adjacents dans \textit{Pos}.
 \end{frame}
 
 \begin{frame}
