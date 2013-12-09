@@ -134,8 +134,71 @@ up de l'arbre des suffixes.
 \section{Applications}
 \label{sec:appli}
 
+Nous allons décrire deux applications dans lesquelles la structure
+Height est intéressante. 
+
+La première est un algorithme de compression
+qui permet, lors de la décompression d'un texte, de récupérer à la
+volée le tableau des suffixes. Il ne reste alors plus qu'à calculer
+Height pour pouvoir faire des recherches de motifs efficaces sur le
+texte extrait.
+
+La seconde est une utilisation de la structure Height pour simuler un
+parcours bottom-up de l'arbre des suffixes. Abouelhode et al ont
+montré par le suite que la structure Height permettait de simuler tous
+les parcours d'arbre de suffixes \cite{Abouelhoda200453}.
+
 \subsection{La compression Block Sorting}
 \label{sec:blocksorting}
+
+La compression Block Sorting est une compression largement répandue
+(bzip2) qui s'appuie sur une transformation de Burrows-Weller
+dont le but est de rapprocher les caractères identiques d'un texte
+afin de pouvoir compresser plus efficacement \cite{Burrows94}.
+
+Cette transformation se réalise en effectuant une rotation du texte à
+compresser, puis en ordonnant lexicographiquement les rotations. A
+partir de ces rotations ordonnées, on obtient un tableau correspondant
+à l'ordre dans lequel les rotations ont été réarrangées ainsi qu'une
+chaîne de caractères correspondant aux derniers caractères de chaque
+rotation après leur arrangement lexicographique. La figure
+\ref{fig:burrows} présente un exemple d'application de cet algorithme
+sur la chaîne ``abcabbca\$''. 
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.5\textwidth]{full_burrows}
+  \caption{Application de la transformation de Burrows Weller à la
+    chaîne abcabbca\$}
+  \label{fig:burrows}
+\end{figure}
+
+
+On remarque que la chaîne obtenue (notée L) est
+``\$ccaabbba''. L'objectif de rapprochement des caractères identiques
+est bien atteint. Le tableau des indices obtenu (noté I), est
+[1,4,8,5,2,6,3,7,9]. A partir de ces deux objets, on peut retrouver le
+texte initial. L'efficacité de la compression est dûe au fait qu'une
+fois les caractères rapprochés, on peut utiliser un encodage
+``move-to-front'', qui consiste, pour chaque caractère, à indiquer sa
+distance avec sa prochaine répétition. Cette distance ayant été
+raccourcie par la transformation de Burrows Weller, on peut la coder
+sur moins de bits. Une fois le ``move-to-front'' effectué, on encode
+les caractères via le codage de Huffman, ce qui permet d'optimiser
+l'espace mémoire utilisé.
+
+Le tableau I obtenu n'est autre que le tableau des suffixes. En effet,
+la rotation, puis ordonnancement par ordre lexicographique revient à
+calculer tous les suffixes du textes les uns après les autres, la
+seule différence étant que l'algorithme de Burrows Weller ne s'arrête
+pas à la fin de la chaîne mais réécrit son début à la suite (ex :
+bbca\$abca). La décompression permet de retrouver L et I, puis le
+texte à partir de ces deux informations. Lors d'une décompression, on
+obtient donc le tableau des suffixes (correspondant à I) sans aucun
+coût supplémentaire. Pour faire une recherche efficace, il manque
+cependant les informations sur les lcps, que l'on peut obtenir en
+calculant le tableau Height tel que décrit section \ref{sec:algo}.
+
 
 \subsection{Simulation d'un parcours bottom-up}
 \label{sec:bottomup}
