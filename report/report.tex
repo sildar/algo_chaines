@@ -92,7 +92,7 @@ liste des applications dans le papier de Bieganski et al \cite{Bieganski94}.
 \label{sec:interest}
 
 
-L'absence des lcp amène une complexité de recherche de $O(m*log(n))$
+L'absence des lcp amène une complexité de recherche de $O(m \times log(n))$
 au lieu de $O(m+log(n))$. Or, dans certaines applications, cette
 information manque. C'est notamment le cas lors d'une compression
 Block Sorting, lors de laquelle on peut aisément récupérer un tableau
@@ -111,44 +111,96 @@ up de l'arbre des suffixes.
 \section{Une structure permettant de retrouver les \textit{lcp}s}
 \label{sec:heightstruct}
 
+% phrase d'intro
+Supposons un texte $A$. Soit $A_{i}$ le suffixe de $A$ commençant à la
+position $i$. On appellera \textit{Pos} l'arbre des suffixes de $A$,
+trié dans l'ordre lexicographique.
+
+L'algorithme de Kasai et al (appelé GetHeight dans l'article) retourne
+la liste des \textit{lcp} de tous les suffixes adjacents de
+\textit{Pos}. L'appellation \textit{Height} vient du fait que le
+\textit{lcp} de deux suffixes $A_i$ et $A_j$ correspond à la longueur,
+dans l'arbre des suffixes de $A$, du plus petit ancêtre commun aux
+deux feuilles qui représentent $A_i$ et $A_j$.
+
+Cette section décrit les spécificités de l'algorithme de calcul des
+\textit{lcp}.
 
 
 \subsection{Le tableau Height}
 \label{sec:struct}
 
 
-% idée : on itère sur les suffixes dans l'ordre d'indice
-% et on calcule le lcp avec le précédent dans Pos (ordre lexicographique)
-L'idée est la suivante~: plutôt que d'itérer sur le tableau trié
-par ordre lexicographique, on choisit d'itérer sur les rangs (les indices de
-début des suffixes dans le texte).
-Cela permet de réduire le nombre de calculs pour trouver les \textit{lcp}.
+L'idée est la suivante~: plutôt que d'itérer dans l'ordre
+lexicographique, on choisit d'itérer sur les suffixes triés par leurs
+rangs (leurs indices de début dans le texte). Le calcul du
+\textit{lcp} s'effectue quant à lui sur des suffixes adjacents dans
+\textit{Pos}~:
+\begin{center}$\mathit{Height}[i] = \mathit{lcp}(A_{\mathit{Pos}[i-1]}, A_{\mathit{Pos}[i]})$.\end{center}
 
-Cette réduction s'explique par les trois propriétés suivantes~:
+Cela permet de réduire le nombre de comparaisons de caractères pour
+trouver les \textit{lcp}.
 
+Pour cela, un tableau supplémentaire \textit{Rank} est utilisé,
+correspondant à l'inverse du tableau \textit{Pos}. Il contient
+l'emplacement dans \textit{Pos} de chaque suffixe, en fonction de son
+indice de début. On a alors \linebreak
+\textit{Rank}[\textit{Pos}[$i$]]~=~$i$.
 
-% 3 propriétés :
-% - le lcp de 2 sous-chaînes est le minimum des lcp de toutes les sous-chaînes
-%   adjacentes dans l'intervalle
-\begin{itemize}
-\item Le \textit{lcp} de deux sous-chaînes est le minimum des \textit{lcp} de
-toutes les sous-chaînes adjacentes de l'intervalle dans le tableau
-\textit{Pos}. % expliquer
+La diminution du nombre de comparaisons pour le calcul du \textit{lcp}
+est dûe au fait qu'il est possible de calculer un \textit{Height}[$i$]
+à partir du \textit{Height}[$i-1$]. Ceci s'explique par les trois
+propriétés suivantes~:
 
+\begin{enumerate}
+\item[\textbf{1.}] Le \textit{lcp} de deux sous-chaînes est le minimum des
+  \textit{lcp} de toutes les sous-chaînes adjacentes de l'intervalle
+  dans le tableau \textit{Pos}~:
+  \begin{center}
+    $\mathit{lcp}(A_{\mathit{Pos}[i]}, A_{\mathit{Pos}[j]}) =
+    \displaystyle\min_{i < k \leq j}
+    \{\mathit{lcp}(A_{\mathit{Pos}[k-1]}, A_{\mathit{Pos}[k]})\}$
+  \end{center}
+\end{enumerate}
 
-% - lorsque l'on supprime le premier caractère du suffixe (ie. lorsque l'on
-%   avance d'un caractère), l'ordre des suffixes comparés est conservé dans Pos
-\item Lorsque l'on supprime le premier caractère du suffixe (ie. lorsque l'on
-avance d'un caractère), l'ordre des suffixes comparés est conservé dans
+En effet, les suffixes étant triés dans l'ordre lexicographique, le
+\textit{lcp} de deux suffixes $A_x$ et $A_y$ est égal au \textit{lcp}
+de tous les suffixes compris entre $A_x$ et $A_y$ (au sens large) dans
 \textit{Pos}.
 
+\begin{enumerate}
+\item[\textbf{2.}] Lorsque l'on supprime le premier caractère du suffixe
+  (ie. lorsque l'on avance d'un caractère), l'ordre des suffixes
+  comparés est conservé dans \textit{Pos} si le \textit{lcp} précédent
+  était $\geq$ 1.
+\end{enumerate}
 
-% - lorsque l'on avance d'un caractère, le lcp diminue de 1 :
-%   lcp(A_{Pos[x−1]+1}, A_{Pos[x]+1}) = lcp(A_{Pos[x−1]}, A_{Pos[x]}) - 1.
-\item Lorsque l'on avance d'un caractère, le \textit{lcp} diminue de 1 si le lcp
-précédent était $\geq$ 1.
-\end{itemize}
+En effet, pour deux suffixes adjacents $A_i$ et $A_j$ dans \textit{Pos} dont la
+première lettre est commune, leurs suffixes $A_{i+1}$ et $A_{j+1}$
+sont aussi dans l'ordre lexicographique. Ils apparaissent donc dans le
+même ordre dans \textit{Pos}.
 
+\begin{enumerate}
+\item[\textbf{3.}] Lorsque l'on avance d'un caractère, le \textit{lcp}
+  diminue de 1 si le \textit{lcp} précédent était $\geq$ 1~:
+  \begin{center}
+    $\mathit{Height}[\mathit{Rank}[i-1]] \geq
+    \mathit{Height}[\mathit{Rank}[i]] - 1$
+%    $\mathit{lcp}(A_{\mathit{Pos}[i-1]+1}, A_{\mathit{Pos}[i]+1}) \geq
+%    \mathit{lcp}(A_{\mathit{Pos}[i-1]}, A_{\mathit{Pos}[i]}) - 1$
+  \end{center}
+\end{enumerate}
+
+La décrémentation est justifiée par le fait que le caractère précédent
+(celui que l'on a ``éliminé'' en avançant) est identique. De plus, si
+deux suffixes $A_i$ et $A_j$ sont adjacents et dans cet ordre dans
+\textit{Pos}, on sait que $A_{i+1}$ et $A_{j+1}$ sont également dans
+cet ordre. S'il existe un $A_k$ situé avant $A_{j+1}$, le \textit{lcp}
+de ces derniers est supérieur ou égal à $\mathit{lcp}(A_{i+1},
+A_{j+1})$, à cause de l'ordre alphabétique.
+
+
+\pagebreak
 \subsection{L'algorithme}
 \label{sec:algo}
 
@@ -175,8 +227,79 @@ précédent était $\geq$ 1.
   \label{fig:getheight}
 \end{figure}
 
+% trace d'un exemple
+Considérons l'algorithme décrit en figure \ref{fig:getheight} appliqué
+à l'exemple $A =$ \texttt{atalata\$}. On suppose que l'on connaît déjà
+le tableau \textit{Pos}, qui est le suivant~:
 
+\footnotesize
+\begin{tabular}{rl}
+3 & \texttt{alata\$}\\
+1 & \texttt{atalata\$}\\
+5 & \texttt{ata\$}\\
+7 & \texttt{a\$}\\
+4 & \texttt{lata\$}\\
+2 & \texttt{talata\$}\\
+6 & \texttt{ta\$}\\
+8 & \texttt{\$}\\
+\end{tabular}
+\normalsize
 
+Pour chaque itération $i$, on calcule le \textit{lcp} de $A_i$ et le
+suffixe qui le précède dans le tableau des suffixes trié.
+
+\begin{itemize}
+\item À la première itération, on compare $A_1$ (`\texttt{atalata\$}') avec
+$A_3$ (\texttt{alata\$}), son suffixe immédiatement précédent dans
+\textit{Pos}. Leur plus long préfixe commun est `\texttt{a}', de
+longueur $h = 1$. On stocke alors cette valeur dans
+$\mathit{Height}[\mathit{Rank}[i]]$, puis on décrémente $h$.
+
+\item On observe ensuite $A_2$ (`\texttt{talata}') et son suffixe précédent
+dans \textit{Pos}, $A_4$ (`\texttt{lata}'). Leur \textit{lcp} vaut
+$h~=~0$.
+
+\item À la troisième étape, $A_3$ est le premier suffixe de \textit{Pos}. On
+passe donc à l'itération suivante.
+
+\item De même que pour la deuxième itération, $A_4$ et $A_2$ n'ont pas de
+préfixe commun.
+
+\item On calcule ensuite le \textit{lcp} de $A_5$ et $A_1$, qui est de
+longueur 3 (il s'agit de `\texttt{ata}'). On obtient donc
+$\mathit{Height}[\mathit{Rank}[5]] ← 3$, et $h$ est décrémenté.
+
+\item À l'itération suivante (6), $h$ n'est pas réincrémenté, puisque le
+\textit{lcp} de $A_6$ et $A_2$ n'est pas supérieur à 2 (sa valeur
+actuelle). Même chose pour les itérations 7 et 8.
+\end{itemize}
+
+À la fin de l'exécution, nous obtenons le tableau suivant~:
+\begin{center}
+  \textit{Rank} = [\_, 1, 3, 1, 0, 0, 2, 0]
+\end{center}
+La première valeur n'est pas renseignée~: chaque valeur prend en
+compte l'indice précédent dans \textit{Pos}.\\ \hfill \\
+
+% pourquoi est-il en O(n) ?
+\paragraph{Complexité:\\}{L'algorithme décrit en figure
+  \ref{fig:getheight} s'exécute en temps linéaire~:}
+
+Dans un premier temps, le tableau des rangs est créé en $n$
+itérations. La deuxième étape de cet algorithme comprend deux boucles
+imbriquées~: le \textit{pour} de la ligne 5 et le \textit{tant que} de
+la ligne 8. Cette deuxième boucle incrémente la taille du \textit{lcp}
+des deux suffixes adjacents, en fonction du nombre de caractères en
+commun rencontrés. Or celui-ci ne dépasse pas $n$, à cause du marqueur
+de fin de chaîne.
+
+La propriété \textbf{3} de la section précédente nous dit qu'il n'est
+pas nécessaire de recalculer le \textit{lcp} en repartant de zéro,
+mais qu'il suffit de le décrémenter. Or cette décrémentation (située à
+la ligne 12) a lieu au plus $n$ fois, puisqu'elle est située dans la
+boucle de plus haut niveau.
+
+On a donc au maximum $2 \times n$ opérations sur la variable \texttt{h}.
 
 
 \section{Applications}
@@ -270,17 +393,17 @@ structure Height, réaliser ce type de parcours en O(n).
          \hline
         \texttt{1}  & \verb!S:=(-1,-1); n:=|T| /*Init stack S*/!\\
         \texttt{2}  & \verb!for k:=1 to n+1 do /*k-th stage*/!\\
-        \texttt{3}  & \verb! ~(Llca, Hlca) := (k-1, Height[k]);!\\
-        \texttt{4}  & \verb! ~(L, H) := top(S);!\\
-        \texttt{5}  & \verb! ~while (H > Hlca) do!\\
-        \texttt{6}  & \verb! ~ ~(L, H) := pop(S), R := k-1;!\\
-        \texttt{7}  & \verb! ~ ~report triple (L, R, H);!\\
-        \texttt{8}  & \verb! ~ ~Llca := L;/*Update boundary*/!\\
-        \texttt{9}  & \verb! ~ ~(L, H) := top(S);!\\
-        \texttt{10} & \verb! ~od!\\
-        \texttt{11} & \verb! ~if (H < Hlca) then!\\
-        \texttt{12} & \verb! ~ ~Push((Llca,Hlca), S); fi;!\\
-        \texttt{13} & \verb! ~Push((k, n - Pos[k] + 1), S);!\\
+        \texttt{3}  & \verb!  (Llca, Hlca) := (k-1, Height[k]);!\\
+        \texttt{4}  & \verb!  (L, H) := top(S);!\\
+        \texttt{5}  & \verb!  while (H > Hlca) do!\\
+        \texttt{6}  & \verb!    (L, H) := pop(S), R := k-1;!\\
+        \texttt{7}  & \verb!    report triple (L, R, H);!\\
+        \texttt{8}  & \verb!    Llca := L;/*Update boundary*/!\\
+        \texttt{9}  & \verb!    (L, H) := top(S);!\\
+        \texttt{10} & \verb!  od!\\
+        \texttt{11} & \verb!  if (H < Hlca) then!\\
+        \texttt{12} & \verb!    Push((Llca,Hlca), S); fi;!\\
+        \texttt{13} & \verb!  Push((k, n - Pos[k] + 1), S);!\\
         \texttt{14} & \verb!od!\\
       \end{tabular}\\
   \caption{L'algorithme de parcours bottom-up}
@@ -288,7 +411,7 @@ structure Height, réaliser ce type de parcours en O(n).
 \end{figure}
 
 L'algorithme se base sur une pile, remplie au fur et à mesure que l'on
-parcoure les feuilles (représentées par le tableau des
+parcourt les feuilles (représentées par le tableau des
 suffixes). Lorsque l'on trouve le plus petit ancêtre commun de deux
 feuilles (grâce au tableau Height), on ajoute cet ancêtre à la
 pile. Il sera retourné lorsque tous ses enfants auront été visités, et

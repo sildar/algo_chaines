@@ -65,7 +65,7 @@
 
   \begin{block}{La recherche de motifs}
     Le tableau des suffixes permet de trouver les occurrences d'un
-    motif dans un texte en $O(m*log(n))$. Associé aux informations sur
+    motif dans un texte en $O(m \times log(n))$. Associé aux informations sur
     les plus longs préfixes communs (Longest Common Prefixes,
     \emph{lcp}), il permet une recherche en $O(m + log(n))$ \cite{Manber93}.
   \end{block}
@@ -202,7 +202,7 @@
   
   \begin{block}{Propriété 3}
     Lorsque l'on avance d'un caractère, le \textit{lcp} diminue de 1
-    si le lcp précédent était $\geq$ 1. 
+    si le \textit{lcp} précédent était $\geq$ 1.
   \end{block}
   
   \pause
@@ -325,24 +325,24 @@
       \hfill \\ \hfill \\
       \only<-2>{\\ \\ \\ \\ \\ \\
       }\only<3>{h ← 0\\
-      \alert<3>{i = 1} ; Rank[i] = 2 ; j ← 3\\
+      \alert<3>{i = 1} ; Rank[i] = 2 ; k ← 3\\
       ~ ~ ~ A[1] = A[3] ? Oui $\Rightarrow$ h ← 1\\
       ~ ~ ~ A[2] = A[4] ? Non $\Rightarrow$ Height[2] ← 1\\
       ~ ~ ~ h ← 0\\
       \\
       }\only<4>{h = 0\\
-      \alert<4>{i = 2} ; Rank[i] = 6 ; j ← 4\\
+      \alert<4>{i = 2} ; Rank[i] = 6 ; k ← 4\\
       ~ ~ ~ A[2] = A[4] ? Non $\Rightarrow$ Height[6] ← 0\\
       \\ \\ \\
       }\only<5>{h = 0\\
       \alert<5>{i = 3} ; Rank[i] = 1\\
       \\ \\ \\ \\
       }\only<6>{h = 0\\
-      \alert<6>{i = 4} ; Rank[i] = 5 ; j ← 7\\
+      \alert<6>{i = 4} ; Rank[i] = 5 ; k ← 7\\
       ~ ~ ~ A[4] = A[7] ? Non $\Rightarrow$ Height[5] ← 0\\
       \\ \\ \\
       }\only<7>{h = 0\\
-      \alert<7>{i = 5} ; Rank[5] = 3 ; j ← 1\\
+      \alert<7>{i = 5} ; Rank[5] = 3 ; k ← 1\\
       ~ ~ ~ A[5] = A[1] ? Oui $\Rightarrow$ h ← 1\\
       ~ ~ ~ A[6] = A[2] ? Oui $\Rightarrow$ h ← 2\\
       ~ ~ ~ A[7] = A[3] ? Oui $\Rightarrow$ h ← 3\\
