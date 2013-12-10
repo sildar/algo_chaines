@@ -1,6 +1,7 @@
 \documentclass[a4paper,10pt]{article}
 \usepackage{libertine}
-\usepackage[utf8]{inputenc}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
 
 \usepackage[french]{babel}
 \usepackage[autolanguage]{numprint}
@@ -48,7 +49,7 @@
 \section{Introduction}
 \label{sec:intro}
 
-L'article de Toru Kasai et al\cite{Kasai01} présente une méthode efficace pour
+L'article de Toru Kasai et al \cite{Kasai01} présente une méthode efficace pour
 obtenir les plus longs préfixes communs nécessaires à une recherche
 efficace dans un texte. Cette information, d'habitude calculée lors de
 la construction du tableau des suffixes, peut dans certaines
@@ -76,14 +77,14 @@ tableau est généralement créé en même temps que le tableau ou l'arbre des
 suffixes, sans occasionner de coût en complexité supplémentaire.
 
 Si l'arbre des suffixes est très efficace pour la recherche de motif,
-il occuppe beaucoup de place en mémoire. Le tableau des suffixes
+il occupe beaucoup de place en mémoire. Le tableau des suffixes
 adresse ce problème en réduisant la taille d'un facteur 4.
 
 Les algorithmes à base d'index sont très utilisés, notamment en
 bioinformatique, où les ``textes'' (des séquences du génome) dans
-lesquels les ``motif'' (une suite de protéines, de bases, ...) sont
+lesquels les ``motifs'' (une suite de protéines, de bases, ...) sont
 recherchés sont très grands. Ces algorithmes sont par exemple utilisés
-pour de l'alignement de génomes\cite{Kurtz04}. On peut trouver une
+pour de l'alignement de génomes \cite{Kurtz04}. On peut trouver une
 liste des applications dans le papier de Bieganski et al \cite{Bieganski94}.
 
 
@@ -91,7 +92,7 @@ liste des applications dans le papier de Bieganski et al \cite{Bieganski94}.
 \label{sec:interest}
 
 
-L'abscence des lcp amène une complexité de recherche de $O(m*log(n))$
+L'absence des lcp amène une complexité de recherche de $O(m*log(n))$
 au lieu de $O(m+log(n))$. Or, dans certaines applications, cette
 information manque. C'est notamment le cas lors d'une compression
 Block Sorting, lors de laquelle on peut aisément récupérer un tableau
@@ -100,34 +101,81 @@ sur les lcp.
 
 Il est alors très utile d'avoir à disposition un algorithme permettant
 de retrouver efficacement les informations manquantes. C'est le cas de
-celui présenter ici, qui permet de retrouver en $O(n)$ les lcp à
+celui présenté ici, qui permet de retrouver en $O(n)$ les lcp à
 partir du tableau des suffixes. Deux applications utilisant cet
 algorithmes sont ensuite présentées : la recherche de motif dans un
 texte compressé en Block Sorting et la simulation d'un parcours bottom
 up de l'arbre des suffixes.
 
 
-\section{Une structure permettant de retrouver les lcps}
+\section{Une structure permettant de retrouver les \textit{lcp}s}
 \label{sec:heightstruct}
+
 
 
 \subsection{Le tableau Height}
 \label{sec:struct}
 
+
 % idée : on itère sur les suffixes dans l'ordre d'indice
 % et on calcule le lcp avec le précédent dans Pos (ordre lexicographique)
+L'idée est la suivante~: plutôt que d'itérer sur le tableau trié
+par ordre lexicographique, on choisit d'itérer sur les rangs (les indices de
+début des suffixes dans le texte).
+Cela permet de réduire le nombre de calculs pour trouver les \textit{lcp}.
+
+Cette réduction s'explique par les trois propriétés suivantes~:
+
 
 % 3 propriétés :
 % - le lcp de 2 sous-chaînes est le minimum des lcp de toutes les sous-chaînes
 %   adjacentes dans l'intervalle
+\begin{itemize}
+\item Le \textit{lcp} de deux sous-chaînes est le minimum des \textit{lcp} de
+toutes les sous-chaînes adjacentes de l'intervalle dans le tableau
+\textit{Pos}. % expliquer
+
+
 % - lorsque l'on supprime le premier caractère du suffixe (ie. lorsque l'on
 %   avance d'un caractère), l'ordre des suffixes comparés est conservé dans Pos
+\item Lorsque l'on supprime le premier caractère du suffixe (ie. lorsque l'on
+avance d'un caractère), l'ordre des suffixes comparés est conservé dans
+\textit{Pos}.
+
+
 % - lorsque l'on avance d'un caractère, le lcp diminue de 1 :
 %   lcp(A_{Pos[x−1]+1}, A_{Pos[x]+1}) = lcp(A_{Pos[x−1]}, A_{Pos[x]}) - 1.
-
+\item Lorsque l'on avance d'un caractère, le \textit{lcp} diminue de 1 si le lcp
+précédent était $\geq$ 1.
+\end{itemize}
 
 \subsection{L'algorithme}
 \label{sec:algo}
+
+\begin{figure}[h]
+  GetHeight\\
+  Entrée: Une chaîne A et son tableau des suffixes\\ \hfill \\
+  \begin{tabular}{r|l}
+    \texttt{1}  & \verb!pour i de 1 à n faire!\\
+    \texttt{2}  & \verb!  Rank[Pos[i]] ← i!\\
+    \texttt{3}  & \verb!fin pour!\\
+    \texttt{4}  & \verb!h ← 0!\\
+    \texttt{5}  & \verb!pour i de 1 à n faire!\\
+    \texttt{6}  & \verb!  si Rank[i] > 1 alors!\\
+    \texttt{7}  & \verb!    k ← Pos[Rank[i]-1]!\\
+    \texttt{8}  & \verb!    tantque A[i+h] = A[k+h] faire!\\
+    \texttt{9}  & \verb!      h ← h+1!\\
+    \texttt{10} & \verb!    fin tq!\\
+    \texttt{11} & \verb!    Height[Rank[i]] ← h!\\
+    \texttt{12} & \verb!    si h > 0 alors h ← h-1 fin si!\\
+    \texttt{13} & \verb!  fin si!\\
+    \texttt{14} & \verb!fin pour!\\
+  \end{tabular}\\
+  \caption{Algorithme de calcul des \textit{lcp} en temps linéaire.}
+  \label{fig:getheight}
+\end{figure}
+
+
 
 
 
@@ -144,7 +192,7 @@ Height pour pouvoir faire des recherches de motifs efficaces sur le
 texte extrait.
 
 La seconde est une utilisation de la structure Height pour simuler un
-parcours bottom-up de l'arbre des suffixes. Abouelhode et al ont
+parcours bottom-up de l'arbre des suffixes. Abouelhoda et al ont
 montré par le suite que la structure Height permettait de simuler tous
 les parcours d'arbre de suffixes \cite{Abouelhoda200453}.
 
@@ -190,7 +238,7 @@ l'espace mémoire utilisé.
 Le tableau I obtenu n'est autre que le tableau des suffixes. En effet,
 la rotation, puis ordonnancement par ordre lexicographique revient à
 calculer tous les suffixes du textes les uns après les autres, la
-seule différence étant que l'algorithme de Burrows Weller ne s'arrête
+seule différence étant que l'algorithme de Burrows-Wheeler ne s'arrête
 pas à la fin de la chaîne mais réécrit son début à la suite (ex :
 bbca\$abca). La décompression permet de retrouver L et I, puis le
 texte à partir de ces deux informations. Lors d'une décompression, on
@@ -234,7 +282,7 @@ Kasai et al proposent un algorithme performant pour calculer les lcps
 à partir du tableau des suffixes. Bien que la plupart des applications
 calculent les lcps en même temps que le tableau des suffixes, on a pu
 voir qu'il existe des cas, comme la décompression d'un texte sous
-Burrows Wheeler, où cette information est manquante.
+Burrows-Wheeler, où cette information est manquante.
 
 On a également pu voir que cette structure permettait de simuler des
 parcours d'arbre des suffixes.
