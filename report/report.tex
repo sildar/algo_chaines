@@ -257,9 +257,35 @@ tous ses fils. Ce type de parcours permet de résoudre de nombreux
 problèmes (répétitions en tandem, plus longue sous-chaîne commune,
 décomposition de Zip Lempel, ...)\cite{Abouelhoda200453}.
 
-L'article de Kasai et al montre qu'on peut, à l'aide du tableau des
-suffixes et de leur structure Height, réaliser ce type de parcours en
-O(n).
+L'article de Kasai et al, présenté en figure \ref{fig:bottomupalgo},
+montre qu'on peut, à l'aide du tableau des suffixes et de leur
+structure Height, réaliser ce type de parcours en O(n).
+
+
+\begin{figure}
+  \centering
+        \begin{tabular}{r|l}
+         & Avec Pos tableau des suffixes et Height présenté
+         précédemment\\
+         \hline
+        \texttt{1}  & \verb!S:=(-1,-1); n:=|T| /*Init stack S*/!\\
+        \texttt{2}  & \verb!for k:=1 to n+1 do /*k-th stage*/!\\
+        \texttt{3}  & \verb! ~(Llca, Hlca) := (k-1, Height[k]);!\\
+        \texttt{4}  & \verb! ~(L, H) := top(S);!\\
+        \texttt{5}  & \verb! ~while (H > Hlca) do!\\
+        \texttt{6}  & \verb! ~ ~(L, H) := pop(S), R := k-1;!\\
+        \texttt{7}  & \verb! ~ ~report triple (L, R, H);!\\
+        \texttt{8}  & \verb! ~ ~Llca := L;/*Update boundary*/!\\
+        \texttt{9}  & \verb! ~ ~(L, H) := top(S);!\\
+        \texttt{10} & \verb! ~od!\\
+        \texttt{11} & \verb! ~if (H < Hlca) then!\\
+        \texttt{12} & \verb! ~ ~Push((Llca,Hlca), S); fi;!\\
+        \texttt{13} & \verb! ~Push((k, n - Pos[k] + 1), S);!\\
+        \texttt{14} & \verb!od!\\
+      \end{tabular}\\
+  \caption{L'algorithme de parcours bottom-up}
+  \label{fig:bottomupalgo}
+\end{figure}
 
 L'algorithme se base sur une pile, remplie au fur et à mesure que l'on
 parcoure les feuilles (représentées par le tableau des
