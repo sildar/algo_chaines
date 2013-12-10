@@ -460,8 +460,150 @@
 %Une conclusion à cette section ?
 
 
-% \section{Simulation d'un parcours bottom-up de l'arbre des suffixes}
-% \label{sec:appbottomup}
+\section{Simulation d'un parcours bottom-up de l'arbre des suffixes}
+\label{sec:appbottomup}
+
+
+\begin{frame}
+  \frametitle{Parcours bottom-up ? Késako ?}
+
+  \begin{block}{Formellement}
+    Il s'agit de parcourir d'abord les feuilles les plus à gauche,
+    puis de partir vers la droite tout en remontant vers la racine. On
+    peut le définir comme le parcours des ``branches les plus à
+    droites'' (Rightmost branches).
+  \end{block}
+
+  \begin{block}{Avec les mains}
+      \begin{figure}
+    \includegraphics[width=0.6\textwidth]{sufftree_atalata}
+  \end{figure}
+  \end{block}
+
+\end{frame}
+
+
+
+\begin{frame}
+
+  \frametitle{Le parcours en question}
+
+    \scriptsize
+  \begin{columns}
+    \column{.5\textwidth}
+      TraverseWithArray\\
+      Entrée: Le tableau des suffixes Pos et le tableau Height\\ \hfill \\
+      \begin{tabular}{r|l}
+        \texttt{1}  & \verb!S:=(-1,-1); n:=|T| /*Init stack S*/!\\
+        \texttt{2}  & \verb!for k:=1 to n+1 do /*k-th stage*/!\\
+        \texttt{3}  & \verb! ~(Llca, Hlca) := (k-1, Height[k]);!\\
+        \texttt{4}  & \verb! ~(L, H) := top(S);!\\
+        \texttt{5}  & \verb! ~while (H > Hlca) do!\\
+        \texttt{6}  & \verb! ~ ~(L, H) := pop(S), R := k-1;!\\
+        \texttt{7}  & \verb! ~ ~report triple (L, R, H);!\\
+        \texttt{8}  & \verb! ~ ~Llca := L;/*Update boundary*/!\\
+        \texttt{9}  & \verb! ~ ~(L, H) := top(S);!\\
+        \texttt{10} & \verb! ~od!\\
+        \texttt{11} & \verb! ~if (H < Hlca) then!\\
+        \texttt{12} & \verb! ~ ~Push((Llca,Hlca), S); fi;!\\
+        \texttt{13} & \verb! ~Push((k, n - Pos[k] + 1), S);!\\
+        \texttt{14} & \verb!od!\\
+      \end{tabular}\\
+    \column{.5\textwidth}
+       Pos : 3 1 5 7 4 2 6 8\\
+    Height : . 1 3 1 0 0 2 0\\
+    \vspace{0.5cm}
+    \pause
+    k=1\\
+    ~ (Llca, Hlca) = (0,0)\\
+    ~ (L, H) = (-1, -1)\\
+    ~ $H > Hlca$ ? Non; $H < Hlca$ ? Oui → push(0,0)\\ 
+    ~ push(1,6) \\
+    stack : (-1,-1) , (0,0), (1,6)\\
+    \vspace{1cm}
+    \pause
+    
+    k=2\\
+    ~ (Llca, Hlca) = (1,1)\\
+    ~ (L, H) = (1, 6)\\
+    ~ $H > Hlca$ ? Oui\\
+    ~ ~ \textcolor{red}{report(1,1,6) (Left, Right, Lenght)}\\
+    ~ ~ Llca = 1\\
+    ~ ~ (L, H) = (0,0)\\
+    ~ $H < Hlca$ ? Oui → push(1,1)\\
+    ~ push(2,8)\\
+    stack : (-1,-1) , (0, 0), (1,1), (2,8)\\
+
+
+  \end{columns}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Le parcours en question II}
+  \scriptsize
+  \begin{columns}
+    \column{.5\textwidth}
+      TraverseWithArray\\
+      Entrée: Le tableau des suffixes Pos et le tableau Height\\ \hfill \\
+      \begin{tabular}{r|l}
+        \texttt{1}  & \verb!S:=(-1,-1); n:=|T| /*Init stack S*/!\\
+        \texttt{2}  & \verb!for k:=1 to n+1 do /*k-th stage*/!\\
+        \texttt{3}  & \verb! ~(Llca, Hlca) := (k-1, Height[k]);!\\
+        \texttt{4}  & \verb! ~(L, H) := top(S);!\\
+        \texttt{5}  & \verb! ~while (H > Hlca) do!\\
+        \texttt{6}  & \verb! ~ ~(L, H) := pop(S), R := k-1;!\\
+        \texttt{7}  & \verb! ~ ~report triple (L, R, H);!\\
+        \texttt{8}  & \verb! ~ ~Llca := L;/*Update boundary*/!\\
+        \texttt{9}  & \verb! ~ ~(L, H) := top(S);!\\
+        \texttt{10} & \verb! ~od!\\
+        \texttt{11} & \verb! ~if (H < Hlca) then!\\
+        \texttt{12} & \verb! ~ ~Push((Llca,Hlca), S); fi;!\\
+        \texttt{13} & \verb! ~Push((k, n - Pos[k] + 1), S);!\\
+        \texttt{14} & \verb!od!\\
+      \end{tabular}\\
+    \column{.5\textwidth}
+
+       Pos : 3 1 5 7 4 2 6 8\\
+    Height : . 1 3 1 0 0 2 0\\
+    \vspace{0.5cm}
+
+    Et on continue (en raccourci)\\
+    k=3\\
+    ~ \textcolor{red}{report(2,2,8)}\\
+    ~ push(2,3) ; push(3,4)\\
+    stack : (-1,-1) , (0,0), (2,3), (3,4)\\
+    \vspace{1cm}
+    \pause
+    
+    k=4\\
+    ~ \textcolor{red}{report(3,3,4)}\\
+    ~ \textcolor{red}{report(2,3,3)} (premier noeud interne)\\
+    ~ push(2,1) ; push(4,2)\\
+    stack : (-1,-1) , (0,0), (2,1), (4,2)\\
+
+  \end{columns}
+
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Bilan du Bottom-up}
+
+  \begin{block}{Un parcours efficace}
+    Parcours de l'arbre en O(n)
+    Les parcours bottom-up peuvent résoudrent de nombreux problèmes
+    (répétitions en tandem, plus longue sous chaîne commune,
+    décomposition de Zip Lempel).
+  \end{block}
+
+  \begin{block}{Un algorithme extensible}
+    Abouelhoda et al ont montré qu'on pouvait étendre cet algorithme
+    pour effectuer des parcours top-down \cite{Abouelhoda200453}.
+  \end{block}
+
+\end{frame}
+
 
 %Aucune idée pour l'instant. Pas sûr qu'on aura le temps de présenter
 %en détail cette section.
