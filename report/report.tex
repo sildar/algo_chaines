@@ -203,6 +203,25 @@ calculant le tableau Height tel que décrit section \ref{sec:algo}.
 \subsection{Simulation d'un parcours bottom-up}
 \label{sec:bottomup}
 
+Un parcours bottom-up consiste à partir de la feuille la plus à gauche
+d'un arbre et à remonter à un noeud père uniquement après avoir vu
+tous ses fils. Ce type de parcours permet de résoudre de nombreux
+problèmes (répétitions en tandem, plus longue sous-chaîne commune,
+décomposition de Zip Lempel, ...)\cite{Abouelhoda200453}.
+
+L'article de Kasai et al montre qu'on peut, à l'aide du tableau des
+suffixes et de leur structure Height, réaliser ce type de parcours en
+O(n).
+
+L'algorithme se base sur une pile, remplie au fur et à mesure que l'on
+parcoure les feuilles (représentées par le tableau des
+suffixes). Lorsque l'on trouve le plus petit ancêtre commun de deux
+feuilles (grâce au tableau Height), on ajoute cet ancêtre à la
+pile. Il sera retourné lorsque tous ses enfants auront été visités, et
+juste avant de retourner le premier enfant du noeud interne suivant.
+
+
+
 %décrire les problèmes résolvables par un parcours bottom up de
 %l'arbre des suffixes : répétition en tandem, plus longue sous chaîne
 %commune, décomposition de Zip Lempel. Citer Abouelhoda pour cette liste.
